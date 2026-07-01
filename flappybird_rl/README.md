@@ -33,13 +33,13 @@ A naive representation of 2 walls on screen (bird row, wall 1 col, wall 1 gap, w
 To optimize, **FlappyGrid sorts the walls by proximity** and only exposes the closest wall's distance. Because the two walls maintain a constant horizontal spacing of half the grid width, the horizontal distance of the second wall is fully deterministic. 
 
 The state is represented as a 5-tuple:
-$$\text{State} = (y_{\text{bird}}, x_{\text{closest\_wall}}, y_{\text{closest\_gap}}, y_{\text{second\_gap}}, \phi_{\text{gravity}})$$
+$$\text{State} = (y_{\text{bird}}, x_{\text{wall}}, y_{\text{gap1}}, y_{\text{gap2}}, \phi_{\text{grav}})$$
 
 1. **`bird_pos`** ($y_{\text{bird}}$): Bird's current row index `[0..H-1]`.
-2. **`distance_to_wall`** ($x_{\text{closest\_wall}}$): Column index of the nearest wall `[0..W-1]`.
-3. **`wall_end_row`** ($y_{\text{closest\_gap}}$): Bottom row index of the nearest wall's gap `[0..H-1]`.
-4. **`second_wall_end_row`** ($y_{\text{second\_gap}}$): Bottom row index of the second nearest wall's gap `[0..H-1]`.
-5. **`gravity_phase`** ($\phi_{\text{gravity}}$): A binary phase bit (`0` or `1`) indicating whether gravity will pull the bird down on the next tick.
+2. **`distance_to_wall`** ($x_{\text{wall}}$): Column index of the nearest wall `[0..W-1]`.
+3. **`wall_end_row`** ($y_{\text{gap1}}$): Bottom row index of the nearest wall's gap `[0..H-1]`.
+4. **`second_wall_end_row`** ($y_{\text{gap2}}$): Bottom row index of the second nearest wall's gap `[0..H-1]`.
+5. **`gravity_phase`** ($\phi_{\text{grav}}$): A binary phase bit (`0` or `1`) indicating whether gravity will pull the bird down on the next tick.
 
 This reduces the total state space size to only $H \times W \times H \times H \times 2$ states (a Q-table size of $H \times W \times H \times H \times 2 \times 3$ parameters), allowing complete convergence.
 
