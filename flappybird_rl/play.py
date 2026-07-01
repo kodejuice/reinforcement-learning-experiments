@@ -51,7 +51,7 @@ def main():
     sleep(0.3)
 
   print(
-    f"\nGame Over! Total steps: {step}, Walls passed: {walls_passed}, Final reward: {total_reward}")
+    f"\nGame Over! Total steps: {step}, Walls passed: {walls_passed}")
 
 
 if __name__ == "__main__":
