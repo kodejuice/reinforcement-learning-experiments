@@ -166,10 +166,16 @@ class FlappyGrid:
         for i in range(wall['height']):
           wr = wall['row_start']
           p = (wr + i) % self.grid_height
-          # grid[(p, wc)] = ' 🚪'
           grid[(p, wc)] = ' ██ '
 
     grid[(r, c)] = ' 🦉'
 
-    print('\n'.join([''.join(row) for row in grid]))
-    print()
+    row_width = self.grid_width * 3
+    top = ' ' + '_' * (row_width + 2)
+    bottom = ' ' + '‾' * (row_width + 2)
+    lines = [top]
+    for row in grid:
+      lines.append('|' + ''.join(row) + '  |')
+    lines.append(bottom)
+    print('\n'.join(lines))
+

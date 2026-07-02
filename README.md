@@ -1,7 +1,8 @@
-# Reinforcement Learning
+# Minimalist RL
 
 Lightweight, minimalist reinforcement learning environments and algorithms I wrote while learning RL.
 
 ## Projects
 
-*   [FlappyGrid RL](./flappybird_rl) — A grid-world Flappy Bird environment featuring dynamic physics (gravity phases, ceiling collision damping) and dual moving obstacles solved using Tabular Q-Learning.
+* [Flappy Bird (DQN)](./flappybird_dqn) - A grid-based clone of Flappy Bird trained using Deep Q-Learning (DQN) with PyTorch. Features dynamic physics and dual moving obstacles.
+* [Flappy Bird (Q-Learning)](./flappybird_ql) - The same grid-based Flappy Bird environment trained using standard tabular Q-Learning.
