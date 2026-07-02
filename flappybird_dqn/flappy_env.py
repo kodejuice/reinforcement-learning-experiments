@@ -156,7 +156,6 @@ class FlappyGrid:
     self.walls = [
         new_wall(column=self.grid_width - 1),
         new_wall(column=(self.grid_width - 1) // 2),
-        # new_wall(column=(self.grid_width - 1) // 2 - 1),
     ]
 
     self.done = False

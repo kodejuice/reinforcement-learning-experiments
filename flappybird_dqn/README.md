@@ -1,5 +1,7 @@
 # Flappy Bird (DQN)
 
+![Flappy Bird Play](flappy%20play.gif)
+
 A PyTorch-based Deep Q-Network (DQN) agent that learns to play a grid-world version of Flappy Bird.
 
 ## Overview
@@ -15,11 +17,11 @@ The environment `FlappyGrid` is a 15x30 grid. The bird (🦉) must navigate thro
 
 ## Files
 
-- `flappy_env.py` - The environment logic and rendering.
-- `mlp.py` - A simple multi-layer perceptron (MLP) built with PyTorch `nn.Module`.
-- `replay_buffer.py` - A fast, numpy-based circular replay buffer for experience replay.
-- `train.py` - The training loop. Implements epsilon-greedy exploration, Adam optimization, and target network updates.
-- `play.py` - An inference script that loads trained weights (`dqn_weights.pt`) and renders the agent playing the game in the terminal.
+- [`flappy_env.py`](./flappy_env.py) - The environment logic and rendering.
+- [`mlp.py`](./mlp.py) - A simple multi-layer perceptron (MLP) built with PyTorch `nn.Module`.
+- [`replay_buffer.py`](./replay_buffer.py) - A fast, numpy-based circular replay buffer for experience replay.
+- [`train.py`](./train.py) - The training loop. Implements epsilon-greedy exploration, Adam optimization, and target network updates.
+- [`play.py`](./play.py) - An inference script that loads trained weights (`dqn_weights.pt`) and renders the agent playing the game in the terminal.
 
 ## Usage
 
