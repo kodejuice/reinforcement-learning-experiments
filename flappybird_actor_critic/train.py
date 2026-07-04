@@ -15,13 +15,14 @@ from mlp import FlappyGridActorCritic
 LR = 1e-3
 GAMMA = 0.99
 ENTROPY_COEFF = 0.01
-EPISODES = 55_000
+EPISODES = 23_000
 
 env = FlappyGrid()
 state_dim = env.W * env.H
 n_actions = 3
 
 policy_net = FlappyGridActorCritic(input_dim=state_dim)
+# policy_net.load_state_dict(torch.load("actor_critic_weights.pt", map_location="cpu"))
 
 optimizer = torch.optim.Adam(policy_net.parameters(), lr=LR)
 
@@ -29,6 +30,7 @@ optimizer = torch.optim.Adam(policy_net.parameters(), lr=LR)
 episode_rewards = []
 episode_walls = []
 
+# best_avg_wall = 700
 best_avg_wall = -float('inf')
 
 def compute_returns(rewards, gamma):
@@ -56,8 +58,10 @@ for episode in range(EPISODES):
     state_tensor = torch.FloatTensor(state)
     logits, value = policy_net(state_tensor)
     probs = F.softmax(logits, dim=-1)
+
     dist = torch.distributions.Categorical(probs)
     action = dist.sample()
+
     log_prob = dist.log_prob(action)
     all_probs_step = probs
 
