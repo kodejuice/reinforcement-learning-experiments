@@ -4,5 +4,6 @@ Lightweight, minimalist reinforcement learning environments and algorithms I wro
 
 ## Projects
 
+* [Flappy Bird (Actor-Critic)](./flappybird_actor_critic) - The grid-based Flappy Bird environment trained using Advantage Actor-Critic (A2C) with PyTorch.
 * [Flappy Bird (DQN)](./flappybird_dqn) - A grid-based clone of Flappy Bird trained using Deep Q-Learning (DQN) with PyTorch. Features dynamic physics and dual moving obstacles.
 * [Flappy Bird (Q-Learning)](./flappybird_ql) - The same grid-based Flappy Bird environment trained using standard tabular Q-Learning.

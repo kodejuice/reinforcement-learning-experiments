@@ -60,6 +60,18 @@ This reduces the total state space size to only $H \times W \times H \times H \t
 - **Episodes**: `200,000`
 - **Exploration ($\epsilon$)**: Starts at `1.0` and decays by `0.999` per episode down to a minimum of `0.01`.
 
+## Training Loop (Tabular Q-Learning)
+
+The agent is trained using standard tabular Q-Learning. In each step of an episode:
+
+1. **Observe State:** The agent observes the current state $s_t$.
+2. **Choose Action:** An action $a_t$ is selected using an $\epsilon$-greedy policy based on the current Q-table $Q(s_t, a)$.
+3. **Execute Action:** The action is taken in the environment, yielding reward $r_t$ and the next state $s_{t+1}$.
+4. **Update Q-value:** The Q-table entry for $(s_t, a_t)$ is updated using the Bellman equation:
+   $$ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[ r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t) \right] $$
+   where $\alpha$ is the learning rate and $\gamma$ is the discount factor.
+5. **Decay Epsilon:** After each episode, the exploration rate $\epsilon$ is decayed to gradually shift from exploration to exploitation.
+
 ---
 
 ## How to Run

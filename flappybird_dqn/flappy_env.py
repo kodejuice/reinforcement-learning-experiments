@@ -130,7 +130,8 @@ class FlappyGrid:
 
     if self.bird_vertical_pos <= 0:
       self.bird_vertical_pos = 0
-      reward = -1  # gentle nudge for hitting ceiling
+      if reward == 0.01:
+        reward = -1  # gentle nudge for hitting ceiling
 
     # Move all walls closer to bird and push them down
     for wall in self.walls:

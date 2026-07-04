@@ -27,9 +27,9 @@ class FlappyGrid:
     is continuously dynamic.
 
   Movement & Physics:
-  - Gravity: The bird naturally falls by 1 row every 2 ticks (odd ticks) if it does not flap.
+  - Gravity: The bird naturally falls by 1 row every tick if it does not flap.
   - Actions:
-    - 0 (NOTHING): Let gravity take effect (bird drifts down 1 row every 2 ticks).
+    - 0 (NOTHING): Let gravity take effect (bird drifts down 1 row).
     - 1 (FLAP): The bird jumps up 1 row.
     - 2 (FLAP_FLAP): The bird jumps up 2 rows.
   - Boundaries:
@@ -41,21 +41,12 @@ class FlappyGrid:
     wall entry and collisions are rendered accurately in column 0.
 
   Rewards:
-  - +1 for successfully navigating a wall (when a wall passes column 0 without collision).
-  - -10 for hitting a wall or falling to the floor.
+  - +5 for successfully navigating a wall (when a wall passes column 0 without collision).
+  - -15 for hitting a wall or falling to the floor.
   - -1 for hitting the ceiling.
-
-  State Representation:
-  The state space is designed to be fully Markovian while keeping the size small:
-  `state = (bird_pos, distance_to_wall, closest_wall_end_row, second_wall_end_row, gravity_phase)`
-  - bird_pos: vertical coordinate of the bird (0 to H-1)
-  - distance_to_wall: horizontal coordinate of the closest wall (0 to W-1)
-  - closest_wall_end_row: vertical coordinate of the bottom end of the closest wall gap (0 to H-1)
-  - second_wall_end_row: vertical coordinate of the bottom end of the second wall gap (0 to H-1)
-  - gravity_phase: binary indicator of whether gravity will trigger next tick (0 or 1)
   """
 
-  def __init__(self, dim=(15, 25)):
+  def __init__(self, dim=(15, 30)):
     self.rc = dim
     self.H, self.W = self.rc
     self.grid_height = self.H
@@ -67,18 +58,33 @@ class FlappyGrid:
     return sorted(in_front, key=lambda w: w['column'])
 
   def pos_to_state(self):
-    bird_pos = self.bird_vertical_pos
-    sorted_walls = self.get_sorted_walls()
-    closest_wall = sorted_walls[0]
-    second_wall = sorted_walls[1]
-    distance_to_wall = closest_wall['column']
-    wall_end_row = (closest_wall['row_start'] +
-                    closest_wall['height']) % self.grid_height
-    second_wall_end_row = (second_wall['row_start'] +
-                           second_wall['height']) % self.grid_height
-    gravity_phase = self.tick_count & 1
-    # H x W x H x H x 2
-    return bird_pos, distance_to_wall, wall_end_row, second_wall_end_row, gravity_phase
+    """
+    Helper function to convert a FlappyGrid instance into a flattened
+    numerical grid representation.
+
+    Empty spaces are represented as 0.0.
+    Wall segments are represented as 1.0.
+    The bird is represented as 0.5.
+
+    Returns:
+        np.ndarray: Flattened array of shape (grid_height * grid_width,)
+    """
+    grid = np.zeros((self.grid_height, self.grid_width), dtype=np.float32)
+
+    # Draw walls
+    for wall in self.walls:
+      wc = wall['column']
+      if 0 <= wc < self.grid_width:
+        for i in range(wall['height']):
+          wr = wall['row_start']
+          p = (wr + i) % self.grid_height
+          grid[p, wc] = 1.0
+
+    # Draw bird
+    if 0 <= self.bird_vertical_pos < self.grid_height:
+      grid[self.bird_vertical_pos, 0] = 0.5
+
+    return grid.flatten()
 
   def check_wall_collides(self, wall):
     for i in range(wall['height']):
@@ -87,14 +93,14 @@ class FlappyGrid:
         return True
     return False
 
-  def tick(self, action):
+  def tick(self, action=NOTHING):
     reward = 0
 
     # Check wall collision FIRST, before bird moves
     for wall in self.walls:
       if wall['column'] == 0:
         if self.check_wall_collides(wall):
-          reward = -10
+          reward = -3
           self.done = True
           return self.pos_to_state(), reward, self.done
         else:
@@ -111,13 +117,13 @@ class FlappyGrid:
       self.bird_vertical_pos = max(self.bird_vertical_pos, 0)
 
     # Gravity: after every 2 steps, bird falls by one step
-    if self.tick_count & 1 and not flap:
+    if not flap:
       self.bird_vertical_pos += 1
 
     # Check grid boundaries
     if self.bird_vertical_pos >= self.grid_height - 1:
       self.done = True
-      reward = -10
+      reward = -3
       self.bird_vertical_pos = self.grid_height - 1
       return self.pos_to_state(), reward, self.done
 
@@ -132,7 +138,6 @@ class FlappyGrid:
         wall['column'] -= 1
         wall['row_start'] += 1
 
-    self.tick_count += 1
     return self.pos_to_state(), reward, self.done
 
   def reset_wall(self, wall):
@@ -153,12 +158,12 @@ class FlappyGrid:
     ]
 
     self.done = False
-    self.tick_count = 0
     self.bird_vertical_pos = self.walls[0]['height'] >> 1
     return self.pos_to_state()
 
   def render(self):
-    grid = np.full((self.grid_height, self.grid_width), '   ')
+    EMPTY = '   '
+    grid = np.full((self.grid_height, self.grid_width), EMPTY)
     r, c = self.bird_vertical_pos, 0
 
     for wall in self.walls:
@@ -169,9 +174,12 @@ class FlappyGrid:
           p = (wr + i) % self.grid_height
           grid[(p, wc)] = ' ██ '
 
-    grid[(r, c)] = ' 🦉'
+    if grid[(r, c)] == EMPTY:
+      grid[(r, c)] = ' 🦉'
+    else:
+      grid[(r, c)] = ' 🟥 '
 
-    row_width = self.grid_width * 3
+    row_width = self.grid_width * 3  # each cell is 3 chars
     top = ' ' + '_' * (row_width + 2)
     bottom = ' ' + '‾' * (row_width + 2)
     lines = [top]
@@ -179,4 +187,3 @@ class FlappyGrid:
       lines.append('|' + ''.join(row) + '  |')
     lines.append(bottom)
     print('\n'.join(lines))
-
