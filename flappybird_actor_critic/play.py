@@ -56,6 +56,6 @@ while not env.done:
     print(f"  Step: {step}  |  Walls: {walls_passed}  |  Action: {A[action]}")
     # print(f"  Confidence:   [{bar}] {confidence:.2f}")
 
-  sleep(0.3)
+  sleep(0.175)
 
 print(f"\nGame over — survived {step} steps, passed {walls_passed} walls")
