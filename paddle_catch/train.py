@@ -22,11 +22,11 @@ best_avg_r = -float('inf')
 def compute_returns(rewards, gamma):
   """
   Computes the discounted returns for a sequence of rewards.
-  
+
   Args:
       rewards (list): A list of rewards received in an episode.
       gamma (float): The discount factor [0, 1].
-      
+
   Returns:
       np.ndarray: An array of discounted returns for each time step.
   """
@@ -92,9 +92,9 @@ for episode in range(EPISODES):
   # torch.nn.utils.clip_grad_norm_(policy_net.parameters(), 0.5)
   optimizer.step()
 
-  total_reward = returns_np[0]  # return from first step is total discounted reward
+  # return from first step is total discounted reward
+  total_reward = returns_np[0]
   episode_rewards.append(total_reward)
-
 
   if (episode + 1) % 100 == 0:
     avg_r = np.mean(episode_rewards[-100:])
