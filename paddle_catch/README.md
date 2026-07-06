@@ -1,5 +1,7 @@
 # Paddle Catch (Continuous Actor-Critic)
 
+![Paddle Animation](paddle%20animation.gif)
+
 A PyTorch-based Advantage Actor-Critic (A2C) agent that learns to play a simple continuous-action Paddle Catch game.
 
 ## Overview
