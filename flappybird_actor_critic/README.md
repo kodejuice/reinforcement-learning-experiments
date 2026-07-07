@@ -44,16 +44,28 @@ The agent is trained using the Advantage Actor-Critic (A2C) algorithm. In each e
 
 1. **Collect Trajectories:** The agent plays an episode, collecting states $s_t$, actions $a_t$, and rewards $r_t$.
 2. **Compute Returns:** For each time step $t$, we compute the discounted return $G_t$:
-   $$ G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k} $$
+```math
+G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k}
+```
 3. **Calculate Advantage:** The advantage $A_t$ is computed using the Critic network's value estimate $V(s_t)$:
-   $$ A_t = G_t - V(s_t) $$
+```math
+A_t = G_t - V(s_t)
+```
 4. **Compute Losses:**
    - **Actor Loss**: Encourages actions that led to better-than-expected returns.
-     $$ \mathcal{L}_{actor} = -\frac{1}{T} \sum_{t=1}^{T} \log \pi(a_t | s_t) A_t $$
+```math
+\mathcal{L}_{actor} = -\frac{1}{T} \sum_{t=1}^{T} \log \pi(a_t | s_t) A_t
+```
    - **Critic Loss**: Minimizes the mean squared error between the value estimate and actual returns.
-     $$ \mathcal{L}_{critic} = \frac{1}{T} \sum_{t=1}^{T} (V(s_t) - G_t)^2 $$
+```math
+\mathcal{L}_{critic} = \frac{1}{T} \sum_{t=1}^{T} (V(s_t) - G_t)^2
+```
    - **Entropy Bonus**: Encourages exploration by penalizing deterministic policies.
-     $$ \mathcal{H} = -\frac{1}{T} \sum_{t=1}^{T} \sum_{a} \pi(a | s_t) \log \pi(a | s_t) $$
+```math
+\mathcal{H} = -\frac{1}{T} \sum_{t=1}^{T} \sum_{a} \pi(a | s_t) \log \pi(a | s_t)
+```
 5. **Update Networks:** The total loss is backpropagated to update both networks simultaneously:
-   $$ \mathcal{L}_{total} = \mathcal{L}_{actor} + \mathcal{L}_{critic} - c \cdot \mathcal{H} $$
+```math
+\mathcal{L}_{total} = \mathcal{L}_{actor} + \mathcal{L}_{critic} - c \cdot \mathcal{H}
+```
    where $c$ is the entropy coefficient.

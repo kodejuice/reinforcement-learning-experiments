@@ -33,7 +33,9 @@ A naive representation of 2 walls on screen (bird row, wall 1 col, wall 1 gap, w
 To optimize, **FlappyGrid sorts the walls by proximity** and only exposes the closest wall's distance. Because the two walls maintain a constant horizontal spacing of half the grid width, the horizontal distance of the second wall is fully deterministic. 
 
 The state is represented as a 5-tuple:
-$$\text{State} = (y_{\text{bird}}, x_{\text{wall}}, y_{\text{gap1}}, y_{\text{gap2}}, \phi_{\text{grav}})$$
+```math
+\text{State} = (y_{\text{bird}}, x_{\text{wall}}, y_{\text{gap1}}, y_{\text{gap2}}, \phi_{\text{grav}})
+```
 
 1. **`bird_pos`** ($y_{\text{bird}}$): Bird's current row index `[0..H-1]`.
 2. **`distance_to_wall`** ($x_{\text{wall}}$): Column index of the nearest wall `[0..W-1]`.
@@ -68,7 +70,9 @@ The agent is trained using standard tabular Q-Learning. In each step of an episo
 2. **Choose Action:** An action $a_t$ is selected using an $\epsilon$-greedy policy based on the current Q-table $Q(s_t, a)$.
 3. **Execute Action:** The action is taken in the environment, yielding reward $r_t$ and the next state $s_{t+1}$.
 4. **Update Q-value:** The Q-table entry for $(s_t, a_t)$ is updated using the Bellman equation:
-   $$ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[ r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t) \right] $$
+```math
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[ r_t + \gamma \max_{a} Q(s_{t+1}, a) - Q(s_t, a_t) \right]
+```
    where $\alpha$ is the learning rate and $\gamma$ is the discount factor.
 5. **Decay Epsilon:** After each episode, the exploration rate $\epsilon$ is decayed to gradually shift from exploration to exploitation.
 

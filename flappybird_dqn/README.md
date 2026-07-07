@@ -48,9 +48,13 @@ The agent is trained using the Deep Q-Network (DQN) algorithm with experience re
 1. **Collect Experience:** The agent interacts with the environment using an $\epsilon$-greedy policy. Transitions $(s_t, a_t, r_t, s_{t+1})$ are stored in a replay buffer.
 2. **Sample Mini-batch:** A random mini-batch of transitions is sampled from the replay buffer to break correlation between consecutive samples.
 3. **Compute Target Q-values:** For each transition, the target Q-value $Y_t$ is computed using the target network (which provides stable targets):
-   $$ Y_t = r_t + \gamma \max_{a'} Q_{target}(s_{t+1}, a') \cdot (1 - d_t) $$
+```math
+Y_t = r_t + \gamma \max_{a'} Q_{target}(s_{t+1}, a') \cdot (1 - d_t)
+```
    where $d_t$ is the boolean done flag (1 if episode ended, 0 otherwise).
 4. **Compute Loss:** The Mean Squared Error (MSE) loss is computed between the predicted Q-values from the online network and the target Q-values:
-   $$ \mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left( Q_{online}(s_i, a_i) - Y_i \right)^2 $$
+```math
+\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} \left( Q_{online}(s_i, a_i) - Y_i \right)^2
+```
 5. **Update Network:** The loss is backpropagated to update the online network $Q_{online}$.
 6. **Target Network Sync:** Every $C$ steps, the target network's weights are completely overwritten with the online network's weights.
