@@ -16,10 +16,12 @@ ENTROPY_COEFF = 0.01
 BATCH_SIZE = 2048
 MINIBATCH_SIZE = 64
 K_EPOCHS = 10
-TOTAL_TIMESTEPS = 3_000_000
+TOTAL_TIMESTEPS = 4_000_000
 
 env = PaddleCatchV2()
 policy_net = ContinuousActorCritic(state_dim=10, action_dim=1, hidden=64)
+# policy_net.load_state_dict(torch.load("ppo_weights.pt", map_location="cpu"))
+
 optimizer = optim.Adam(policy_net.parameters(), lr=LR)
 
 
@@ -47,7 +49,8 @@ def compute_gae(rewards, values, dones, gamma, lam, next_value):
 
 state = env.reset()
 global_step = 0
-best_avg_r = -float('inf')
+best_avg_r = -12.3
+# best_avg_r = -float('inf')
 
 episode_rewards = []
 current_ep_reward = 0

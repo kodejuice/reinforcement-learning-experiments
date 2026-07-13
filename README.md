@@ -9,3 +9,10 @@ Lightweight, minimalist reinforcement learning environments and algorithms I wro
 - [Flappy Bird (Q-Learning)](./flappybird_ql) - The same grid-based Flappy Bird environment trained using standard tabular Q-Learning.
 - [Paddle Catch (Continuous Actor-Critic)](./paddle_catch) - A continuous-action paddle catch environment trained using PyTorch Advantage Actor-Critic (A2C) with a Normal distribution.
 - [Paddle Catch V2 (PPO)](./paddle_catch_v2) - An advanced multi-ball juggling environment with gravity, wind, and obstacles, trained using Proximal Policy Optimization (PPO).
+
+## Requirements
+
+All projects in this repository share the same minimalist dependencies:
+- Python 3.7+
+- PyTorch (`torch`)
+- NumPy (`numpy`)
