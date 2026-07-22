@@ -1,5 +1,7 @@
 # Paddle Catch V2 (Proximal Policy Optimization)
 
+![Paddle Animation](paddle%20animation.gif)
+
 A PyTorch-based Proximal Policy Optimization (PPO) agent that learns to juggle multiple balls in a complex continuous-action Paddle Catch environment with gravity, dynamic wind, and obstacles.
 
 ## Overview
